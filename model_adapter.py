@@ -251,11 +251,7 @@ class DeepDrugResponseModel(nn.Module):
 
         # Deep drug encoder
         self.drug_encoder = nn.Sequential(
-            nn.Linear(drug_feat_dim, 1024),
-            nn.BatchNorm1d(1024),
-            nn.ReLU(),
-            nn.Dropout(0.3),
-            nn.Linear(1024, 512),
+            nn.Linear(drug_feat_dim, 512),
             nn.BatchNorm1d(512),
             nn.ReLU(),
             nn.Dropout(0.3),
