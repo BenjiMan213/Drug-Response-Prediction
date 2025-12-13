@@ -1,13 +1,3 @@
-"""
-Modular Fully Connected Neural Network for Drug Response Prediction
-
-This module provides a flexible PyTorch-based neural network with customizable:
-- Input/output sizes
-- Number and size of hidden layers
-- Optimizers
-- Loss functions
-- Evaluation metrics
-"""
 
 import torch
 import torch.nn as nn
@@ -17,16 +7,6 @@ import numpy as np
 
 
 class ModularFCNN(nn.Module):
-    """
-    Fully Connected Neural Network with customizable architecture.
-
-    Args:
-        input_size: Number of input features
-        hidden_layers: List of integers specifying the size of each hidden layer
-        dropout_rate: Dropout probability for regularization (default: 0.0)
-        activation: Activation function to use ('relu', 'tanh', 'sigmoid', 'leaky_relu')
-        batch_norm: Whether to use batch normalization (default: False)
-    """
 
     def __init__(
         self,
@@ -86,15 +66,7 @@ class ModularFCNN(nn.Module):
         return activations[activation.lower()]
 
     def forward(self, x: torch.Tensor) -> torch.Tensor:
-        """
-        Forward pass through the network.
 
-        Args:
-            x: Input tensor of shape (batch_size, input_size)
-
-        Returns:
-            Output tensor of shape (batch_size, 1)
-        """
         for i, layer in enumerate(self.layers):
             x = layer(x)
 
@@ -115,17 +87,6 @@ class ModularFCNN(nn.Module):
 
 
 class NeuralNetworkTrainer:
-    """
-    Trainer class for the Modular FCNN with customizable training components.
-
-    Args:
-        model: The neural network model to train
-        optimizer_name: Name of optimizer ('adam', 'sgd', 'rmsprop', 'adamw')
-        loss_fn_name: Name of loss function ('mse', 'mae', 'huber', 'smooth_l1')
-        learning_rate: Learning rate for optimizer
-        optimizer_params: Additional parameters for optimizer
-        device: Device to train on ('cuda' or 'cpu')
-    """
 
     def __init__(
         self,
@@ -187,16 +148,7 @@ class NeuralNetworkTrainer:
         train_loader: torch.utils.data.DataLoader,
         metrics: Optional[List[Callable]] = None
     ) -> Tuple[float, Dict[str, float]]:
-        """
-        Train for one epoch.
 
-        Args:
-            train_loader: DataLoader for training data
-            metrics: List of metric functions
-
-        Returns:
-            Tuple of (average_loss, metrics_dict)
-        """
         self.model.train()
         total_loss = 0.0
         num_batches = 0
@@ -238,16 +190,7 @@ class NeuralNetworkTrainer:
         val_loader: torch.utils.data.DataLoader,
         metrics: Optional[List[Callable]] = None
     ) -> Tuple[float, Dict[str, float]]:
-        """
-        Validate the model.
 
-        Args:
-            val_loader: DataLoader for validation data
-            metrics: List of metric functions
-
-        Returns:
-            Tuple of (average_loss, metrics_dict)
-        """
         self.model.eval()
         total_loss = 0.0
         num_batches = 0
@@ -289,17 +232,7 @@ class NeuralNetworkTrainer:
         verbose: bool = True,
         early_stopping_patience: Optional[int] = None
     ):
-        """
-        Train the model for multiple epochs.
 
-        Args:
-            train_loader: DataLoader for training data
-            val_loader: DataLoader for validation data (optional)
-            epochs: Number of epochs to train
-            metrics: List of metric functions
-            verbose: Whether to print progress
-            early_stopping_patience: Stop if validation loss doesn't improve for N epochs
-        """
         best_val_loss = float('inf')
         patience_counter = 0
 
@@ -336,15 +269,7 @@ class NeuralNetworkTrainer:
                     print(f"Epoch {epoch+1}/{epochs} - Train Loss: {train_loss:.4f}")
 
     def predict(self, x: torch.Tensor) -> np.ndarray:
-        """
-        Make predictions on input data.
 
-        Args:
-            x: Input tensor
-
-        Returns:
-            Predictions as numpy array
-        """
         self.model.eval()
         with torch.no_grad():
             x = x.to(self.device)
@@ -400,62 +325,3 @@ def pearson_correlation(y_pred: np.ndarray, y_true: np.ndarray) -> float:
         y_true = y_true.flatten()
 
     return np.corrcoef(y_pred, y_true)[0, 1]
-
-
-if __name__ == "__main__":
-    # Example usage
-    print("Example: Creating a Modular FCNN")
-    print("-" * 50)
-
-    # Define network architecture
-    input_size = 2048  # e.g., TF-IDF features
-    hidden_layers = [512, 256, 128, 64]  # 4 hidden layers
-
-    # Create model
-    model = ModularFCNN(
-        input_size=input_size,
-        hidden_layers=hidden_layers,
-        dropout_rate=0.3,
-        activation='relu',
-        batch_norm=True
-    )
-
-    print(f"Model created with {model.get_num_parameters():,} parameters")
-    print(f"Architecture: {input_size} -> {' -> '.join(map(str, hidden_layers))} -> 1")
-    print()
-
-    # Create trainer
-    trainer = NeuralNetworkTrainer(
-        model=model,
-        optimizer_name='adam',
-        loss_fn_name='mse',
-        learning_rate=0.001,
-        optimizer_params={'weight_decay': 1e-5}
-    )
-
-    print(f"Trainer initialized with optimizer: Adam, loss: MSE")
-    print(f"Device: {trainer.device}")
-    print()
-
-    # Create dummy data for demonstration
-    dummy_x = torch.randn(100, input_size)
-    dummy_y = torch.randn(100, 1)
-
-    # Create DataLoader
-    dataset = torch.utils.data.TensorDataset(dummy_x, dummy_y)
-    train_loader = torch.utils.data.DataLoader(dataset, batch_size=32, shuffle=True)
-
-    # Define metrics
-    metrics = [mean_absolute_error, r_squared]
-
-    print("Training on dummy data...")
-    trainer.fit(
-        train_loader=train_loader,
-        epochs=20,
-        metrics=metrics,
-        verbose=True
-    )
-
-    print()
-    print("Training complete!")
-    print(f"Final training loss: {trainer.train_losses[-1]:.4f}")
