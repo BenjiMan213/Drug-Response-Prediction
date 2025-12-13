@@ -7,7 +7,9 @@ from pathlib import Path
 required_files = {
     'cv_pipeline.py': 'CV pipeline module',
     'model_adapter.py': 'Model adapter module',
-    'drug_smiles_tfidf_features.csv': 'Drug TF-IDF features'
+    'drug_smiles_tfidf_vectors.json' : 'drug features',
+    'sorted_IC50_82833_580_170.csv' : 'Drug-Cell-IC50 data',
+    'CCLE_2369_binary_cnv.csv' : 'Cell Features File'
 }
 print("\nChecking required files...")
 
@@ -36,7 +38,7 @@ except ImportError as e:
     sys.exit(1)
 
 try:
-    from model_adapter import SimpleDrugResponseModel, DrugResponseModel, DEFAULT_CONFIG, DeepDrugResponseModel
+    from model_adapter import DeepDrugResponseModel
 
 except ImportError as e:
     print(f"Failed to import model_adapter: {e}")
