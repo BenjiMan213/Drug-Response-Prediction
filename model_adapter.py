@@ -62,15 +62,3 @@ class DeepDrugResponseModel(nn.Module):
     def get_num_parameters(self) -> int:
         """Return total number of trainable parameters."""
         return sum(p.numel() for p in self.parameters() if p.requires_grad)
-'''
-
-
-DEEP_CONFIG = {
-    'cell_hidden_layers': [512, 256, 128],
-    'drug_hidden_layers': [1024, 512, 256],
-    'fusion_hidden_layers': [512, 256, 128, 64],
-    'dropout_rate': 0.4,
-    'activation': 'relu',
-    'batch_norm': True,
-    'fusion_method': 'concat'
-}'''

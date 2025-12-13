@@ -37,10 +37,6 @@ class DrugResponseData:
         print(f"  Drug features: {self.drug_features.shape}")
 
 
-# ============================================================================
-# DATASET
-# ============================================================================
-
 class PairDataset(Dataset):
     """Dataset for cell-drug pairs."""
 
@@ -63,9 +59,6 @@ class PairDataset(Dataset):
         return x_cell, x_drug, y
 
 
-# ============================================================================
-# CROSS-VALIDATION SPLITS
-# ============================================================================
 
 def make_random_pair_folds(data: DrugResponseData, n_folds: int = 5,
                            val_fraction: float = 0.1, seed: int = 0) -> List[Tuple]:
@@ -93,7 +86,7 @@ def make_random_pair_folds(data: DrugResponseData, n_folds: int = 5,
 
         fold_splits.append((train_idx, val_idx, test_idx))
 
-    print(f"✓ Random split: {n_folds} folds created")
+    print(f" Random split: {n_folds} folds created")
     return fold_splits
 
 
@@ -199,7 +192,7 @@ def make_cell_drug_blind_folds(data: DrugResponseData, n_folds: int = 5,
 
         fold_splits.append((train_idx, val_idx, test_idx))
 
-    print(f"✓ Cell+Drug blind split: {n_folds} folds created")
+    print(f" Cell+Drug blind split: {n_folds} folds created")
     return fold_splits
 
 
