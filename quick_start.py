@@ -55,7 +55,7 @@ except ImportError as e:
     sys.exit(1)
 
 try:
-    from model_adapter import SimpleDrugResponseModel, DrugResponseModel, DEFAULT_CONFIG
+    from model_adapter import SimpleDrugResponseModel, DrugResponseModel, DEFAULT_CONFIG, DeepDrugResponseModel
 
     print("✓ Model adapter loaded")
 except ImportError as e:
@@ -124,6 +124,7 @@ print("Step 4: Configuring Experiment")
 print("=" * 60)
 
 # Experiment configuration
+'''
 config = {
     'model_class': SimpleDrugResponseModel,
     'split_types': ['random', 'cell_blind'],  # Start with 2 splits for speed
@@ -132,6 +133,17 @@ config = {
     'lr': 1e-3,
     'n_epochs': 10,  # Use 10 epochs for quick test (change to 50+ for final)
     'device': 'cpu',  # Change to 'cpu' if no GPU
+    'verbose': True
+}
+'''
+config = {
+    'model_class': DeepDrugResponseModel,  # or DrugResponseModel if you want
+    'split_types': ['random', 'cell_blind', 'drug_blind', 'cell_drug_blind'],
+    'n_folds': 5,          # project requirement
+    'batch_size': 128,     # can tweak if memory is an issue
+    'lr': 1e-3,
+    'n_epochs': 50,        # or 50–100 for final
+    'device': 'cpu',       # keep 'cpu' on your laptop
     'verbose': True
 }
 
