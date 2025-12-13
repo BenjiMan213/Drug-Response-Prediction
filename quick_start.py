@@ -28,7 +28,6 @@ if missing_files:
 
 try:
     from cv_pipeline import (
-        load_drug_features_from_csv,
         DrugResponseData,
         run_all_cv
     )
