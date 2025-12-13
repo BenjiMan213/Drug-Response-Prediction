@@ -14,17 +14,15 @@ print("\nChecking required files...")
 missing_files = []
 for file, description in required_files.items():
     if Path(file).exists():
-        print(f"✓ {file} ({description})")
+        print(f" {file} ({description})")
     else:
-        print(f"✗ {file} ({description}) - MISSING!")
+        print(f" {file} ({description}) - MISSING!")
         missing_files.append(file)
 
 if missing_files:
     print(f"\nError: Missing required files: {', '.join(missing_files)}")
     print("Please ensure all files are in the current directory.")
     sys.exit(1)
-
-
 
 try:
     from cv_pipeline import (
